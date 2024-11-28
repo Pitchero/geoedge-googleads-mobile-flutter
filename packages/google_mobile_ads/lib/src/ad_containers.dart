@@ -948,6 +948,8 @@ class AdManagerBannerAd extends AdWithView {
   })  : assert(sizes.isNotEmpty),
         super(adUnitId: adUnitId, listener: listener);
 
+  final String geoEdgeApiKey;
+
   /// Targeting information used to fetch an [Ad].
   final AdManagerAdRequest request;
 

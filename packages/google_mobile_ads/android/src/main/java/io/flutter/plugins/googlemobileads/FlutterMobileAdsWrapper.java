@@ -19,6 +19,11 @@ import android.os.Build;
 import android.util.Log;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
+
+import com.appharbr.sdk.configuration.AHSdkConfiguration;
+import com.appharbr.sdk.engine.AppHarbr;
+import com.appharbr.sdk.engine.InitializationFailureReason;
+import com.appharbr.sdk.engine.listeners.OnAppHarbrInitializationCompleteListener;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnAdInspectorClosedListener;
 import com.google.android.gms.ads.RequestConfiguration;
@@ -35,12 +40,24 @@ public class FlutterMobileAdsWrapper {
 
   /** Initializes the sdk. */
   public void initialize(
-      @NonNull Context context, @NonNull OnInitializationCompleteListener listener) {
+      @NonNull Context context, @NonNull OnInitializationCompleteListener listener, @NonNull String geoEdgeApiKey) {
     new Thread(
             new Runnable() {
               @Override
               public void run() {
                 MobileAds.initialize(context, listener);
+                AHSdkConfiguration ahSdkConfiguration = new AHSdkConfiguration.Builder(geoEdgeApiKey).build();
+                AppHarbr.initialize(context, ahSdkConfiguration, new OnAppHarbrInitializationCompleteListener() {
+                  @Override
+                  public void onSuccess() {
+                    Log.d("AppHarbr", "Initialization succeeded");
+                  }
+
+                  @Override
+                  public void onFailure(@NonNull InitializationFailureReason initializationFailureReason) {
+                    Log.e("AppHarbr", "Initialization failed: " + initializationFailureReason);
+                  }
+                });
               }
             })
         .start();

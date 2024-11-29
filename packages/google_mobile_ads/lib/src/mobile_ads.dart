@@ -49,8 +49,8 @@ class MobileAds {
   ///
   /// If this method is not called, the first ad request automatically
   /// initializes the Google Mobile Ads SDK.
-  Future<InitializationStatus> initialize() {
-    return instanceManager.initialize();
+  Future<InitializationStatus> initialize({required String geoEdgeApiKey}) {
+    return instanceManager.initialize(geoEdgeApiKey: geoEdgeApiKey);
   }
 
   /// Get the current [RequestConfiguration].

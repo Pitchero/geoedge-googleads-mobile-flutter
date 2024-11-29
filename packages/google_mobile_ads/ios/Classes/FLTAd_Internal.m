@@ -15,6 +15,7 @@
 #import "FLTAd_Internal.h"
 #import "FLTAdUtil.h"
 #import "FLTNativeTemplateStyle.h"
+@import AppHarbrSDK;
 
 @implementation FLTAdSize
 - (instancetype _Nonnull)initWithWidth:(NSNumber *_Nonnull)width
@@ -481,6 +482,7 @@
                                          currencyCode:value.currencyCode]];
     };
   }
+    [[AppHarbr shared] addBannerAdSdk:AdSdkGam adObject:self.bannerView delegate:NULL];
   return self;
 }
 

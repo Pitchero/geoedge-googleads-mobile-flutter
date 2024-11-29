@@ -1,1 +1,8 @@
 rootProject.name = 'google_mobile_ads'
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+}

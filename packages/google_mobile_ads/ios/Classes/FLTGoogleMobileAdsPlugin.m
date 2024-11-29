@@ -19,6 +19,7 @@
 #import "FLTNSString.h"
 #import "UserMessagingPlatform/FLTUserMessagingPlatformManager.h"
 @import webview_flutter_wkwebview;
+@import AppHarbrSDK;
 
 @interface FLTGoogleMobileAdsPlugin ()
 @property(nonatomic, retain) FlutterMethodChannel *channel;
@@ -29,7 +30,7 @@
 /// Initialization handler for GMASDK. Invokes result at most once.
 @interface FLTInitializationHandler : NSObject
 - (instancetype)initWithResult:(FlutterResult)result;
-- (void)handleInitializationComplete:(GADInitializationStatus *_Nonnull)status;
+- (void)handleInitializationComplete:(GADInitializationStatus *_Nonnull)status geoEdgeApiKey:(NSString*)key;
 @end
 
 @interface GADMobileAds (Plugin)
@@ -50,7 +51,7 @@
   return self;
 }
 
-- (void)handleInitializationComplete:(GADInitializationStatus *_Nonnull)status {
+- (void)handleInitializationComplete:(GADInitializationStatus *_Nonnull)status geoEdgeApiKey:(NSString*)key {
   if (_isInitializationCompleted) {
     return;
   }
@@ -60,6 +61,13 @@
   if ([mobileAds respondsToSelector:@selector(setPlugin:)]) {
     [mobileAds setPlugin:FLT_REQUEST_AGENT_VERSIONED];
   }
+    
+    AppHarbrConfiguration *configuration = [[[AppHarbrConfigurationBuilder alloc] initWithApiKey: key] build];
+    [[AppHarbr shared] initializeSdkWithConfiguration:configuration completion:^(NSError * error) {
+        if (error == NULL) {
+            NSLog(@"Success");
+        }
+    }];
 }
 
 @end
@@ -248,15 +256,16 @@
                   result:(FlutterResult)result {
   UIViewController *rootController = self.rootController;
 
-  if ([call.method isEqualToString:@"MobileAds#initialize"]) {
-    FLTInitializationHandler *handler =
-        [[FLTInitializationHandler alloc] initWithResult:result];
-    [[GADMobileAds sharedInstance]
-        startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
-            // Pass the geoEdgeApiKey to your initialization logic
-            [handler handleInitializationComplete:status geoEdgeApiKey:geoEdgeApiKey];
-      }];
-  } else if ([call.method isEqualToString:@"_init"]) {
+    if ([call.method isEqualToString:@"MobileAds#initialize"]) {
+      FLTInitializationHandler *handler =
+          [[FLTInitializationHandler alloc] initWithResult:result];
+      [[GADMobileAds sharedInstance]
+          startWithCompletionHandler:^(GADInitializationStatus *_Nonnull status) {
+              // Pass the geoEdgeApiKey to your initialization logic
+              [handler handleInitializationComplete:status geoEdgeApiKey:call.arguments[@"geoEdgeApiKey"]];
+        }];
+    }
+ else if ([call.method isEqualToString:@"_init"]) {
     [_manager disposeAllAds];
     result(nil);
   } else if ([call.method isEqualToString:@"MobileAds#setSameAppKeyEnabled"]) {

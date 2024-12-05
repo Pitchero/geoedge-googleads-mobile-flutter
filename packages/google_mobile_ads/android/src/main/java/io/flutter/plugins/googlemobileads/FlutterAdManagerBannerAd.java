@@ -73,12 +73,12 @@ class FlutterAdManagerBannerAd extends FlutterAd implements FlutterAdLoadedListe
     }
     adView.setAdUnitId(adUnitId);
     adView.setAppEventListener(
-        new AppEventListener() {
-          @Override
-          public void onAppEvent(String name, String data) {
-            manager.onAppEvent(adId, name, data);
-          }
-        });
+            new AppEventListener() {
+              @Override
+              public void onAppEvent(String name, String data) {
+                manager.onAppEvent(adId, name, data);
+              }
+            });
 
     final AdSize[] allSizes = new AdSize[sizes.size()];
     for (int i = 0; i < sizes.size(); i++) {
@@ -86,6 +86,22 @@ class FlutterAdManagerBannerAd extends FlutterAd implements FlutterAdLoadedListe
     }
     adView.setAdSizes(allSizes);
     adView.setAdListener(new FlutterBannerAdListener(adId, manager, this));
+    AppHarbr.addBannerView(AdSdk.GAM,
+            adView,
+            null,
+            null,
+            null,
+            adIncidentInfo -> {
+              Log.d("FlutterAdManagerBannerAd", "AppHarbr - On Banner Blocked");
+              try {
+                if (adView != null && adView.getAdSize() != null) {
+                  adView.loadAd(request.asAdManagerAdRequest(adUnitId));
+                }
+              } catch (Exception e) {
+                Log.d("FlutterAdManagerBannerAd", "AppHarbr - Unable to load new ad after blocking");
+              }
+            }
+    );
     adView.loadAd(request.asAdManagerAdRequest(adUnitId));
   }
 

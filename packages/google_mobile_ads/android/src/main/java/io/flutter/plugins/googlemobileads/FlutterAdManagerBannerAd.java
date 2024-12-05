@@ -17,9 +17,14 @@ package io.flutter.plugins.googlemobileads;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.appharbr.sdk.engine.AdSdk;
+import com.appharbr.sdk.engine.AppHarbr;
+import com.appharbr.sdk.engine.adnetworks.inappbidding.InAppBidding;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.admanager.AppEventListener;

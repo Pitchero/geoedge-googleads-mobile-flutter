@@ -1,32 +1,42 @@
-# Google Mobile Ads for Flutter
 
-[![google_mobile_ads](https://github.com/googleads/googleads-mobile-flutter/actions/workflows/google_mobile_ads.yaml/badge.svg)](https://github.com/googleads/googleads-mobile-flutter/actions/workflows/google_mobile_ads.yaml)
+# GeoEdge Google Ads Package
 
-This repository contains the source code for the Google Mobile Ads Flutter
-plugin, which enables publishers to monetize [Flutter](https://flutter.dev/)
-apps using the Google Mobile Ads SDK. 
+A fork of the official [google_mobile_ads](https://pub.dev/packages/google_mobile_ads) package, customised to integrate the GeoEdge AppHarbr SDK for iOS and Android.
 
-## Documentation
+This fork adds support for monitoring Google Ad Manager (GAM) Banner Ads with GeoEdge. Note that it does not implement full AppHarbr SDK functionality, focusing specifically on banner ads to maintain compatibility with our mobile apps.
 
-For instructions on how to use the plugin, please refer to the developer guides
-for [AdMob](https://developers.google.com/admob/flutter/quick-start) and
-[Ad Manager](https://developers.google.com/ad-manager/mobile-ads-sdk/flutter/quick-start).
+## Key Features
 
-## Downloads
+- Integrates GeoEdge's ad quality monitoring with GAM Banner Ads.
+- Supports both iOS and Android platforms.
 
-See [pub.dev](https://pub.dev/packages/google_mobile_ads/versions) for the
-latest releases of the plugin.
+## Usage
 
-## Suggesting improvements
+To use this package, follow the steps below:
 
-To file bugs, make feature requests, or to suggest other improvements, please
-use [github's issue tracker](https://github.com/googleads/googleads-mobile-flutter/issues).
+1. **Initialise MobileAds with GeoEdge API Key**:  
+   Provide your GeoEdge API key when initialising Google ads `MobileAds.instance.initialize(geoEdgeApiKey: "XXXXXX")`.
 
+2. **Create a banner ad**:
+   Follow the [official docs](https://developers.google.com/admob/flutter/quick-start) to create yuor banner ad. No other setup needed.
 
-## Other resources
+## Versioning
 
-* [AdMob help center](https://support.google.com/admob/?hl=en#topic=7383088)
-* [Ad Manager help center](https://support.google.com/admanager/?hl=en#topic=7505988)
+This fork adheres to semantic versioning, closely following the versioning of the upstream `google_mobile_ads` package. Versioning conventions are as follows:
+
+- **Base Version**: Matches the upstream `google_mobile_ads` version.
+- **Build Number**: Appended to indicate changes specific to this fork.
+
+### Example:
+If the upstream version is `1.2.3` and changes are made within this fork:
+- Initial tag: `1.2.3`  
+- First fork-specific update: `1.2.3+1`  
+- Second fork-specific update: `1.2.3+2`, and so on.
+
+To update this package:
+1. Merge the latest changes from the official `google_mobile_ads` repository. Latest versions to be merged to `main`.
+2. Test thoroughly.
+3. Tag the release following the versioning scheme outlined above.
 
 ## License
 

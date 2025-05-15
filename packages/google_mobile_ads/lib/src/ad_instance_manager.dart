@@ -439,9 +439,12 @@ class AdInstanceManager {
     }
   }
 
-  Future<InitializationStatus> initialize() async {
+  Future<InitializationStatus> initialize({required String geoEdgeApiKey}) async {
     return (await instanceManager.channel.invokeMethod<InitializationStatus>(
       'MobileAds#initialize',
+      <dynamic, dynamic>{
+        'geoEdgeApiKey': geoEdgeApiKey,
+      },
     ))!;
   }
 

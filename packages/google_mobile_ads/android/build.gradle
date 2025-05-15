@@ -3,6 +3,9 @@ version '6.0.0'
 
 buildscript {
     repositories {
+        maven {
+            url "https://jitpack.io"
+        }
         google()
         mavenCentral()
     }
@@ -14,6 +17,9 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+        maven {
+            url "https://jitpack.io"
+        }
         google()
         mavenCentral()
     }
@@ -34,6 +40,7 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
     dependencies {
         api 'com.google.android.gms:play-services-ads:24.1.0'
         implementation 'com.google.android.ump:user-messaging-platform:3.2.0'
@@ -45,12 +52,21 @@ android {
         testImplementation 'org.mockito:mockito-core:5.15.2'
         testImplementation 'org.robolectric:robolectric:4.14.1'
         testImplementation 'androidx.test:core:1.5.0'
+        implementation 'com.github.appharbr:appharbr-android-sdk:2.22.0'
     }
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
     }
+}
+
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+    google()
+    mavenCentral()
 }
 
 afterEvaluate {

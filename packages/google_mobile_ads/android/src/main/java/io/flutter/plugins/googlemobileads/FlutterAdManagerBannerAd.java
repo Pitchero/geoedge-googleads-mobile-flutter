@@ -17,9 +17,14 @@ package io.flutter.plugins.googlemobileads;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.appharbr.sdk.engine.AdSdk;
+import com.appharbr.sdk.engine.AppHarbr;
+import com.appharbr.sdk.engine.adnetworks.inappbidding.InAppBidding;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.admanager.AdManagerAdView;
 import com.google.android.gms.ads.admanager.AppEventListener;
@@ -73,12 +78,12 @@ class FlutterAdManagerBannerAd extends FlutterAd implements FlutterAdLoadedListe
     }
     adView.setAdUnitId(adUnitId);
     adView.setAppEventListener(
-        new AppEventListener() {
-          @Override
-          public void onAppEvent(String name, String data) {
-            manager.onAppEvent(adId, name, data);
-          }
-        });
+            new AppEventListener() {
+              @Override
+              public void onAppEvent(String name, String data) {
+                manager.onAppEvent(adId, name, data);
+              }
+            });
 
     final AdSize[] allSizes = new AdSize[sizes.size()];
     for (int i = 0; i < sizes.size(); i++) {
@@ -86,6 +91,22 @@ class FlutterAdManagerBannerAd extends FlutterAd implements FlutterAdLoadedListe
     }
     adView.setAdSizes(allSizes);
     adView.setAdListener(new FlutterBannerAdListener(adId, manager, this));
+    AppHarbr.addBannerView(AdSdk.GAM,
+            adView,
+            null,
+            null,
+            null,
+            adIncidentInfo -> {
+              Log.d("FlutterAdManagerBannerAd", "AppHarbr - On Banner Blocked");
+              try {
+                if (adView != null && adView.getAdSize() != null) {
+                  adView.loadAd(request.asAdManagerAdRequest(adUnitId));
+                }
+              } catch (Exception e) {
+                Log.d("FlutterAdManagerBannerAd", "AppHarbr - Unable to load new ad after blocking");
+              }
+            }
+    );
     adView.loadAd(request.asAdManagerAdRequest(adUnitId));
   }
 

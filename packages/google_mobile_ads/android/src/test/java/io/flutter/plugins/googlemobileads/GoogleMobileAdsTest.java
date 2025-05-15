@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doAnswer;
@@ -492,9 +493,12 @@ public class GoogleMobileAdsTest {
         .when(mockMobileAds)
         .initialize(
             ArgumentMatchers.any(Context.class),
-            ArgumentMatchers.any(OnInitializationCompleteListener.class));
+            ArgumentMatchers.any(OnInitializationCompleteListener.class),
+            ArgumentMatchers.any(String.class));
 
-    MethodCall methodCall = new MethodCall("MobileAds#initialize", null);
+    MethodCall methodCall = new MethodCall("MobileAds#initialize", new HashMap <String, String>() {{
+      put("geoEdgeApiKey", "123");
+    }});
     Result result = mock(Result.class);
     plugin.onMethodCall(methodCall, result);
 
@@ -585,13 +589,15 @@ public class GoogleMobileAdsTest {
     GoogleMobileAdsPlugin plugin = new GoogleMobileAdsPlugin(null, null, flutterMobileAdsWrapper);
     plugin.onAttachedToEngine(mockFlutterPluginBinding);
 
-    MethodCall methodCall = new MethodCall("MobileAds#initialize", null);
+    MethodCall methodCall = new MethodCall("MobileAds#initialize", new HashMap<String, String>() {{
+      put("geoEdgeApiKey", "123");
+    }});
     Result result = mock(Result.class);
     plugin.onMethodCall(methodCall, result);
 
     // Check that we use application context if activity is not available.
     verify(flutterMobileAdsWrapper)
-        .initialize(eq(ApplicationProvider.getApplicationContext()), any());
+        .initialize(eq(ApplicationProvider.getApplicationContext()), any(), anyString());
 
     // Activity should be used instead of application context
     ActivityPluginBinding activityPluginBinding = mock(ActivityPluginBinding.class);
@@ -600,7 +606,7 @@ public class GoogleMobileAdsTest {
 
     plugin.onMethodCall(methodCall, result);
 
-    verify(flutterMobileAdsWrapper).initialize(eq(mockActivity), any());
+    verify(flutterMobileAdsWrapper).initialize(eq(mockActivity), any(),anyString());
   }
 
   @Test
